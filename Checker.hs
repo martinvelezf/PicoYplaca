@@ -3,9 +3,9 @@ import Data.Time
 import Data.Time.Calendar.WeekDate
 import Data.List.Split
 import Text.Read
-
+import Control.DeepSeq
 import Control.Exception.Base
-
+import Control.Monad.IO.Class
 
 getLastNumber :: String -> Int
 getLastNumber x
@@ -39,20 +39,21 @@ checkDayPlate day last
 
 --check if it is possible road
 checkRoad plate day time =
-    let n = getLastNumber plate
+    let n = ( getLastNumber plate)
         dayweek = covertDatetoDay day
         ans= checkDayPlate dayweek n
-        in  if (checktime time)
-             then if (ans)
-                 then "Puede manajar"
-                 else  "No puede manajar" 
-             else "Puede manajar"
+        in  if ( ans)
+            then  (checktime time) `deepseq` "Puede manejar" 
+            else 
+                if (checktime time)
+                    then "Puede manejar"
+                    else  "No puede manejar" 
 
 --Check if the user write good the data
-handleErrors plate day time= do
+picoplaca plate day time= do
     let handler :: SomeException -> IO [Char]
         handler e = do
-           return "Datos mal ingresados:"
+           return "Datos mal ingresados"
     res <- (evaluate ((checkRoad plate day time)) ) `catch` handler
     return res
 
