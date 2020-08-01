@@ -1,6 +1,5 @@
 {-# LANGUAGE BangPatterns #-}
 module Main where
-import Test.Tasty
 
 
 import           Control.Monad
