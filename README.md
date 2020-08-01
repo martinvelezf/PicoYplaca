@@ -1,5 +1,6 @@
 # PicoYplaca
 To test this program you must install hspec, you can do it with this command
+
 cabal update && cabal install hspec
 
 There are 3 principal files, 
