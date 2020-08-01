@@ -14,10 +14,13 @@ There are 3 principal files,
 
 
 *** Run the file *****
+
 cabal exec runhaskell Main.hs (It will show the answers of the test write in csv file)
 
 *** Running with gchi *****
+
 ghci Main.hs
+
 *Main> picoplaca "123-4567" "2020-07-30" "23:45"
 
 
