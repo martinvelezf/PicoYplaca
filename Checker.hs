@@ -8,26 +8,27 @@ import Control.Exception.Base
 import Control.Monad.IO.Class
 
 getLastNumber :: String -> Int
-getLastNumber x
-    |length x== 8 = (read::String->Int) [(head.reverse) x] --get las number of a plate car
-    |length x== 6 = (read::String->Int) [(head.tail.reverse) x] --get las number of a plate motcycle
+getLastNumber plate
+    |length plate==8 && length (partsplate!!0)== 3 && length (partsplate!!1)== 4= (read::String->Int) [(head.reverse) plate] --get las number of a plate car which follows this format xxx-xxxd
+    |length plate== 6 = (read::String->Int) [(head.tail.reverse) plate] --get las number of a plate motcycle
+    where partsplate=splitOn "-" plate
 
 --get the day of weekend of a date
 covertDatetoDay :: [Char] -> Int
-covertDatetoDay date=x  
+covertDatetoDay date=numofday  
     where 
         arraydate=(splitOn "-" date)
         tls=map (read::String->Int) $tail arraydate
         hd=(read::String->Integer) (head arraydate)
-        (_,_,x)=toWeekDate (fromGregorian hd (tls!!0) (tls!!1) ) --return just the number of day in days of weeks (1-7)
+        (_,_,numofday)=toWeekDate (fromGregorian hd (tls!!0) (tls!!1) ) --return just the number of day in days of weeks (1-7)
 
 --check if the time is correct 
 checktime :: [Char] -> Bool
 checktime time
-    |(arraytime!!1)<60 = x
+    |(arraytime!!1)<60 = aviable
     where 
         arraytime=map (read::String->Int)(splitOn ":" time)
-        x=timeRoad  $((arraytime!!0)*100)+(arraytime!!1) 
+        aviable=timeRoad  $((arraytime!!0)*100)+(arraytime!!1) 
 
 --check if the time has some restriction
 timeRoad :: Int-> Bool        
@@ -48,7 +49,7 @@ checkRoad plate day time =
         dayweek = covertDatetoDay day
         ans= checkDayPlate dayweek n
         in  if ( ans)
-            then  (checktime time) `deepseq` "Puede manejar" --force the evaluation, to notify if the user write a bad element
+            then  (checktime time) `deepseq` "Puede manejar" --force the evaluation, to notify if the user write a bad time write
             else 
                 if (checktime time)
                     then "Puede manejar"
