@@ -19,8 +19,8 @@ cabal exec runhaskell Main.hs (It will show the answers of the test write in csv
 
 *** Running with gchi *****
 
-ghci Main.hs
+ghci Check.hs
 
-*Main> picoplaca "123-4567" "2020-07-30" "23:45"
+*Check> picoplaca "123-4567" "2020-07-30" "23:45"
 
 
