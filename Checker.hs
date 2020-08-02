@@ -19,7 +19,7 @@ covertDatetoDay date=x
         arraydate=(splitOn "-" date)
         tls=map (read::String->Int) $tail arraydate
         hd=(read::String->Integer) (head arraydate)
-        (_,_,x)=toWeekDate (fromGregorian hd (tls!!0) (tls!!1) )
+        (_,_,x)=toWeekDate (fromGregorian hd (tls!!0) (tls!!1) ) --return just the number of day in days of weeks (1-7)
 
 --check if the time is correct 
 checktime :: [Char] -> Bool
@@ -38,7 +38,7 @@ timeRoad x
     --ckeck if the plate have a restriction in the current day
 checkDayPlate ::  Int -> Int -> Bool
 checkDayPlate day last
-    | foldr (\x y -> (x==(day,last))|| y) False [(1,1),(1,2),(2,3),(2,4),(3,5),(3,6),(4,7),(4,8),(5,9),(5,0)] =False
+    | foldr (\x y -> (x==(day,last))|| y) False [(x,y)|x<-[1..5],y<-[0..10],y==(2*x) `mod` 10 ||y==(2*x)-1 ] =False --check all the posible combination of day that the user cannot road according to the number of plate and the number of day
     | otherwise = True
 
 --check if it is possible road
@@ -48,7 +48,7 @@ checkRoad plate day time =
         dayweek = covertDatetoDay day
         ans= checkDayPlate dayweek n
         in  if ( ans)
-            then  (checktime time) `deepseq` "Puede manejar" 
+            then  (checktime time) `deepseq` "Puede manejar" --force the evaluation, to notify if the user write a bad element
             else 
                 if (checktime time)
                     then "Puede manejar"
